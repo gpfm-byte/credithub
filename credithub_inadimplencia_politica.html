@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CreditHub — Comitê de Crédito</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#f5f7fb;color:#172033}.app{display:flex;min-height:100vh}.side{width:245px;background:#111827;color:#fff;padding:24px 16px;position:fixed;inset:0 auto 0 0}.brand{font-size:21px;font-weight:800;padding:8px 12px 30px}.brand span{color:#60a5fa}.nav button{width:100%;border:0;background:transparent;color:#cbd5e1;text-align:left;padding:12px;border-radius:9px;margin:3px 0;font-size:14px;cursor:pointer}.nav button.active,.nav button:hover{background:#1f2937;color:#fff}.main{margin-left:245px;flex:1;padding:28px 34px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}.top h1{margin:0;font-size:25px}.badge{background:#dcfce7;color:#166534;padding:7px 11px;border-radius:999px;font-size:12px;font-weight:700}.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}.card{background:#fff;border:1px solid #e7ebf2;border-radius:13px;padding:18px;box-shadow:0 2px 8px #11182708}.label{font-size:12px;color:#64748b}.value{font-size:25px;font-weight:800;margin-top:7px}.sub{font-size:11px;color:#94a3b8;margin-top:5px}.layout{display:grid;grid-template-columns:1.25fr .9fr;gap:18px;margin-top:18px}.section-title{font-weight:750;margin-bottom:15px}.bar{margin:13px 0}.barline{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px}.track{height:9px;background:#e5e7eb;border-radius:99px;overflow:hidden}.fill{height:100%;border-radius:99px;background:#3b82f6}.fill.warn{background:#f59e0b}.fill.danger{background:#ef4444}.chat{height:310px;display:flex;flex-direction:column}.messages{flex:1;overflow:auto;background:#f8fafc;border-radius:10px;padding:13px}.msg{max-width:86%;padding:10px 12px;border-radius:11px;margin:7px 0;font-size:13px;line-height:1.45}.bot{background:#e2e8f0}.user{background:#dbeafe;margin-left:auto}.input{display:flex;gap:8px;margin-top:10px}.input input,.form input,.form select{width:100%;border:1px solid #dbe2ea;border-radius:9px;padding:11px;background:#fff}.input button,.primary{border:0;background:#2563eb;color:#fff;border-radius:9px;padding:10px 15px;font-weight:700;cursor:pointer}.client{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.metric{background:#f8fafc;border-radius:9px;padding:12px}.metric b{display:block;margin-top:4px}.decision{margin-top:15px;padding:14px;border-radius:10px;background:#fff7ed;border:1px solid #fed7aa}.decision strong{color:#b45309}.hidden{display:none}.footer{font-size:11px;color:#94a3b8;margin-top:22px}.form-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.field label{display:block;font-size:12px;font-weight:700;color:#475569;margin-bottom:6px}.field small{display:block;color:#94a3b8;margin-top:4px}.actions{display:flex;gap:10px;margin-top:18px}.secondary{border:1px solid #dbe2ea;background:#fff;color:#334155;border-radius:9px;padding:10px 15px;font-weight:700;cursor:pointer}.result{margin-top:18px;display:none}.result.show{display:block}.pill{display:inline-block;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:800}.low{background:#dcfce7;color:#166534}.medium{background:#fef3c7;color:#92400e}.high{background:#fee2e2;color:#991b1b}.explain{background:#f8fafc;border-radius:10px;padding:14px;margin-top:12px;line-height:1.55;font-size:13px}.history{margin-top:18px}.table{width:100%;border-collapse:collapse;font-size:13px}.table th,.table td{padding:10px;border-bottom:1px solid #e8edf3;text-align:left}.table th{color:#64748b;font-size:11px;text-transform:uppercase}.toast{position:fixed;right:24px;bottom:24px;background:#111827;color:#fff;padding:12px 16px;border-radius:10px;display:none;box-shadow:0 8px 30px #0002}.toast.show{display:block}
+@media(max-width:1100px){.grid{grid-template-columns:repeat(3,1fr)}.form-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:900px){.side{width:190px}.main{margin-left:190px}.grid{grid-template-columns:repeat(2,1fr)}.layout{grid-template-columns:1fr}}@media(max-width:650px){.side{position:static;width:100%;height:auto}.app{display:block}.main{margin-left:0;padding:18px}.form-grid,.client{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr}}
+</style>
+<style>
+.factor-box{margin-top:16px;padding:14px;border:1px solid #e7ebf2;border-radius:10px;background:#f8fafc}
+.factor-good{color:#15803d}.factor-neutral{color:#a16207}.factor-bad{color:#b91c1c}
+.range-readout{font-size:13px;color:#64748b;margin-top:4px}
+.policy-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:650px){.policy-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body><div class="app">
+<aside class="side"><div class="brand">Credit<span>Hub</span></div><div class="nav">
+<button class="active" onclick="show('dashboard',this)">▦ Dashboard</button>
+<button onclick="show('novo',this)">＋ Novo cliente</button>
+<button onclick="show('cliente',this)">◉ Última análise</button>
+<button onclick="show('copiloto',this)">✦ Copiloto RAG + LLM</button>
+<button onclick="show('politicas',this)">▤ Políticas de crédito</button>
+<button onclick="show('logs',this)">⌕ Log de pesquisas</button>
+</div></aside>
+<main class="main">
+<section id="dashboard"><div class="top"><div><h1>Comitê de Crédito</h1><div class="label">Visão executiva da carteira e análises realizadas</div></div><span class="badge">● Modelo online</span></div>
+<div class="grid" id="kpis"></div>
+<div class="layout"><div class="card"><div class="section-title">Distribuição de risco da base</div><div class="bar"><div class="barline"><span>Baixo risco</span><b>10,8%</b></div><div class="track"><div class="fill" style="width:10.8%"></div></div></div><div class="bar"><div class="barline"><span>Risco médio</span><b>76,2%</b></div><div class="track"><div class="fill warn" style="width:76.2%"></div></div></div><div class="bar"><div class="barline"><span>Alto risco</span><b>13,0%</b></div><div class="track"><div class="fill danger" style="width:13%"></div></div></div><div class="section-title" style="margin-top:25px">Score alternativo</div><div class="bar"><div class="barline"><span>Thin file</span><b>574</b></div><div class="track"><div class="fill warn" style="width:57.4%"></div></div></div><div class="bar"><div class="barline"><span>Com bureau</span><b>634</b></div><div class="track"><div class="fill" style="width:63.4%"></div></div></div></div>
+<div class="card chat"><div class="section-title">Copiloto de Crédito</div><div class="messages" id="dashChat"><div class="msg bot">Olá! Posso explicar a carteira, consultar KPIs ou analisar um cliente com base nos dados e nas políticas recuperadas pelo RAG.</div><div class="msg bot"><b>Insight:</b> 76,2% da carteira está em risco médio. O maior potencial de otimização está nesse grupo.</div></div><div class="input"><input id="q1" placeholder="Ex.: qual o principal risco da carteira?"><button onclick="ask('q1','dashChat')">Perguntar</button></div></div></div>
+<div class="footer">Base histórica: 500 perfis da planilha. Novas análises feitas no formulário ficam disponíveis nesta sessão.</div></section>
+
+<section id="novo" class="hidden"><div class="top"><div><h1>Novo cliente</h1><div class="label">Cadastre os dados e execute a análise de crédito</div></div></div>
+<div class="card form"><div class="section-title">Dados cadastrais e financeiros</div><div class="form-grid">
+<div class="field"><label>Identificador do cliente</label><input id="fId" placeholder="Ex.: CLI-00501"></div>
+<div class="field"><label>Score bureau</label><input id="fBureau" type="number" min="0" max="1000" placeholder="0 a 1000"><small>Deixe 0 se for thin file.</small></div>
+<div class="field"><label>Meses de conta</label><input id="fMeses" type="number" min="0" placeholder="Ex.: 24"></div>
+<div class="field"><label>Renda média / mês (R$)</label><input id="fRenda" type="number" min="0" step="0.01" placeholder="Ex.: 4800"></div>
+<div class="field"><label>Pix / mês (nº)</label><input id="fPix" type="number" min="0" placeholder="Ex.: 35"></div>
+<div class="field"><label>Dias ativos no app (/30)</label><input id="fDias" type="number" min="0" max="30" placeholder="Ex.: 22"></div>
+<div class="field">
+  <label for="fCidadePct">% de tempo na mesma cidade — últimos 6 meses</label>
+  <input id="fCidadePct" type="range" min="0" max="100" step="1" value="80"
+         oninput="document.getElementById('cidadePctValue').textContent=this.value+'%'; atualizarFatores();">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:5px;">
+    <small>0%</small><strong id="cidadePctValue">80%</strong><small>100%</small>
+  </div>
+  <small>Percentual de permanência na mesma cidade durante os últimos 6 meses.</small>
+</div>
+
+<div class="field">
+  <label for="fInadimplente">Cliente está atualmente inadimplente?</label>
+  <select id="fInadimplente" onchange="atualizarFatores()">
+    <option value="nao" selected>Não — sem inadimplência ativa</option>
+    <option value="sim">Sim — possui dívida/obrigação em atraso</option>
+  </select>
+  <small>Critério de concessão: inadimplência ativa é tratada como impedimento para aprovação automática.</small>
+</div>
+<div class="field">
+  <label for="fVolatilidade">Volatilidade da renda</label>
+  <select id="fVolatilidade" onchange="atualizarFatores()">
+    <option value="5">Muito baixa — até 10%</option>
+    <option value="15" selected>Baixa — 11% a 20%</option>
+    <option value="25">Moderada — 21% a 35%</option>
+    <option value="42">Alta — 36% a 50%</option>
+    <option value="60">Muito alta — acima de 50%</option>
+  </select>
+  <small>Faixa de variação da renda mensal observada no período.</small>
+</div>
+<div class="field"><label>Pedido de crédito (R$)</label><input id="fPedido" type="number" min="0" step="0.01" placeholder="Ex.: 2000"></div>
+<div class="field"><label>Observação do analista</label><input id="fObs" placeholder="Ex.: renda estável, documentos conferidos"></div>
+</div>
+<div id="fatoresPreview" class="factor-box">
+  <div class="section-title">Fatores complementares de risco</div>
+  <div class="policy-grid">
+    <div class="metric">
+      <div class="label">Estabilidade residencial</div>
+      <b id="cidadeClassificacao">80% · Estável</b>
+    </div>
+    <div class="metric">
+      <div class="label">Volatilidade da renda</div>
+      <b id="rendaClassificacao">Baixa</b>
+    </div>
+    <div class="metric">
+      <div class="label">Situação de pagamento</div>
+      <b id="inadimplenciaClassificacao">Adimplente</b>
+    </div>
+  </div>
+  <div class="label" style="margin-top:10px">
+    Estes fatores entram no score final do novo cliente e são explicados no parecer.
+  </div>
+</div>
+<div class="actions"><button class="primary" onclick="analisarNovoCliente()">Analisar cliente</button><button class="secondary" onclick="limparFormulario()">Limpar</button></div></div>
+<div id="resultadoNovo" class="result"></div></section>
+
+<section id="cliente" class="hidden"><div class="top"><div><h1>Última análise</h1><div class="label">Resultado mais recente calculado pelo CreditHub</div></div></div><div id="ultimaAnalise"><div class="card"><div class="label">Nenhuma nova análise nesta sessão.</div><p>Use <b>Novo cliente</b> para cadastrar um perfil.</p></div></div></section>
+
+<section id="copiloto" class="hidden"><div class="top"><div><h1>Copiloto RAG + LLM</h1><div class="label">Pergunte sobre clientes, regras e KPIs</div></div></div><div class="card chat" style="height:560px"><div class="messages" id="mainChat"><div class="msg bot">Sou o copiloto do CreditHub. Neste mock, minhas respostas simulam a etapa de recuperação (RAG) + interpretação (LLM).</div></div><div class="input"><input id="q2" placeholder="Ex.: por que o risco médio é o principal ponto de atenção?"><button onclick="ask('q2','mainChat')">Enviar</button></div></div></section>
+
+<section id="logs" class="hidden"><div class="top"><div><h1>Log de pesquisas</h1><div class="label">Histórico das consultas e análises executadas nesta sessão</div></div><button class="secondary" onclick="clearLogs()">Limpar log</button></div><div class="card"><div class="section-title">Consultas realizadas</div><div style="display:flex;gap:10px;margin-bottom:14px"><input id="logFilter" oninput="renderLogs()" placeholder="Filtrar por cliente, ação ou resultado..." style="flex:1;border:1px solid #dbe2ea;border-radius:9px;padding:11px"></div><div style="overflow:auto"><table class="table"><thead><tr><th>Data/hora</th><th>Usuário</th><th>Ação</th><th>Cliente</th><th>Resultado</th><th>Detalhe</th></tr></thead><tbody id="logsBody"></tbody></table></div><div id="noLogs" class="label" style="padding:18px 0">Nenhuma pesquisa registrada ainda.</div></div></section>
+
+<section id="politicas" class="hidden"><div class="top"><div><h1>Base de conhecimento</h1><div class="label">Documentos que seriam consultados pelo RAG</div></div></div><div class="card"><div class="metric">📄 Política de Crédito v3.2<b>Regras de score, limites e análise manual</b></div><br><div class="metric">📄 Manual de Comitê<b>Critérios de exceção e governança</b></div><br><div class="metric">📊 KPIs da carteira<b>Risco, score, thin file e exposição</b></div><div class="explain"><b>Novos clientes — fatores adicionais</b><br>
+• <b>Estabilidade residencial:</b> usa % de tempo na mesma cidade nos últimos 6 meses; ≥90% muito estável, 75–89% estável, 50–74% moderada, 25–49% instável, &lt;25% muito instável.<br>
+• <b>Volatilidade da renda:</b> ≤10% muito baixa, 11–20% baixa, 21–35% moderada, 36–50% alta, &gt;50% muito alta.<br>
+• <b>Régua:</b> ≥700 aprovação recomendada (ou condicionada para thin file); 550–699 aprovação condicionada; 450–549 análise manual/limite reduzido; <450 recusa recomendada. Comprometimento >70% é recusa e >50% exige condição/revisão.
+</div><div class="explain"><b>Régua demonstrativa sugerida</b><br>• <b>Score ≥ 700:</b> aprovação recomendada, desde que não haja alerta de capacidade/documentação.<br>• <b>Score 550–699:</b> aprovação condicionada ou revisão manual; conferir capacidade, estabilidade e dados alternativos.<br>• <b>Score 450–549:</b> comitê/revisão manual, limite reduzido ou garantia, conforme política.<br>• <b>Score &lt; 450:</b> recusa recomendada, salvo exceção formal.<br><br><b>Regra complementar:</b> o valor solicitado não deve ser avaliado isoladamente. No protótipo, pedidos muito altos em relação à renda são tratados como alerta. Para produção, a política deve usar comprometimento de renda, dívidas existentes, prazo, taxa, garantias e histórico de pagamento.</div></div></section>
+</main></div><div id="toast" class="toast"></div>
+<script>
+const base={clients:500,total:882800,avgTicket:1766,medium:76.2,high:13,thin:32.6};
+const kpisEl=document.getElementById('kpis');
+function renderKpis(){const n=base.clients;const k={"Clientes analisados":n,"Risco médio":base.medium.toFixed(1).replace('.',',')+'%',"Risco alto":base.high.toFixed(1).replace('.',',')+'%',"Thin file":base.thin.toFixed(1).replace('.',',')+'%',"Valor solicitado":money(base.total),"Ticket médio":money(base.total/n)};kpisEl.innerHTML='';Object.entries(k).forEach(([a,b])=>kpisEl.innerHTML+=`<div class="card"><div class="label">${a}</div><div class="value">${b}</div><div class="sub">Base de demonstração</div></div>`)}
+renderKpis();
+atualizarFatores();
+renderLogs();
+function money(v){return new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0}).format(v)}
+function show(id,btn){document.querySelectorAll('section').forEach(s=>s.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active')}
+function num(id){return Number(document.getElementById(id).value)||0}
+function classificarCidadePct(pct){
+  pct=Number(pct)||0;
+  if(pct>=90)return{label:'Muito estável',impact:'positivo',cls:'factor-good',bonus:40};
+  if(pct>=75)return{label:'Estável',impact:'positivo',cls:'factor-good',bonus:25};
+  if(pct>=50)return{label:'Moderada',impact:'neutro',cls:'factor-neutral',bonus:0};
+  if(pct>=25)return{label:'Instável',impact:'negativo',cls:'factor-bad',bonus:-20};
+  return{label:'Muito instável',impact:'fortemente negativo',cls:'factor-bad',bonus:-40};
+}
+function rendaFactorLabel(pct){ return classificarVolatilidade(pct).label+' — '+Number(pct).toFixed(0)+'% de referência'; }
+function classificarVolatilidade(pct){
+  pct=Number(pct)||0;
+  if(pct<=10)return{label:'Muito baixa',impact:'positivo',cls:'factor-good',bonus:30};
+  if(pct<=20)return{label:'Baixa',impact:'positivo',cls:'factor-good',bonus:15};
+  if(pct<=35)return{label:'Moderada',impact:'neutro',cls:'factor-neutral',bonus:0};
+  if(pct<=50)return{label:'Alta',impact:'negativo',cls:'factor-bad',bonus:-20};
+  return{label:'Muito alta',impact:'fortemente negativo',cls:'factor-bad',bonus:-35};
+}
+function atualizarFatores(){
+  const cidade=Number(document.getElementById('fCidadePct')?.value||80);
+  const vol=Number(document.getElementById('fVolatilidade')?.value||15);
+  const inad=document.getElementById('fInadimplente')?.value||'nao';
+  const c=classificarCidadePct(cidade),r=classificarVolatilidade(vol);
+  const ce=document.getElementById('cidadeClassificacao'),re=document.getElementById('rendaClassificacao');
+  const ie=document.getElementById('inadimplenciaClassificacao');
+  if(ce)ce.innerHTML='<span class="'+c.cls+'">'+cidade+'% · '+c.label+'</span>';
+  if(re)re.innerHTML='<span class="'+r.cls+'">'+r.label+' ('+vol+'% de referência)</span>';
+  if(ie){
+    ie.innerHTML = inad==='sim'
+      ? '<span class="factor-bad">INADIMPLENTE — BLOQUEIO</span>'
+      : '<span class="factor-good">ADIMPLENTE</span>';
+  }
+}
+function calcScore({bureau,meses,renda,pix,dias,cidadePct,pedido,volatilidade,inadimplente}){
+  // 1) Score comportamental/alternativo: cada componente é normalizado em 0-1000.
+  const sMeses = Math.min(meses,60)/60*1000;
+  const sRenda = Math.min(renda,10000)/10000*1000;
+  const sPix = Math.min(pix,100)/100*1000;
+  const sDias = Math.min(dias,30)/30*1000;
+
+  const cidade = classificarCidadePct(cidadePct);
+  const rendaVol = classificarVolatilidade(volatilidade);
+
+  // Estabilidade residencial: 0-1000 diretamente pelo percentual de permanência.
+  const sCidade = Math.max(0, Math.min(1000, Number(cidadePct)*10));
+  // Volatilidade: menor volatilidade = maior pontuação.
+  const vol = Math.max(0, Math.min(100, Number(volatilidade)||0));
+  const sVol = Math.max(0, 1000 - vol*10);
+
+  // Alternativo: 15% relacionamento + 30% renda + 20% Pix +
+  // 15% atividade + 10% residência + 10% estabilidade de renda.
+  const alt = Math.round(
+    sMeses*0.15 + sRenda*0.30 + sPix*0.20 +
+    sDias*0.15 + sCidade*0.10 + sVol*0.10
+  );
+
+  // Com bureau: bureau tem 50%; sem bureau, o alternativo é usado integralmente.
+  const thin = !bureau || bureau <= 0;
+  const score = thin ? alt : Math.round(bureau*0.50 + alt*0.50);
+
+  // Capacidade: % do pedido sobre a renda mensal.
+  const comprometimento = renda > 0 ? (pedido/renda)*100 : 999;
+
+  return {alt,score,comprometimento,cidadeFactor:cidade,rendaFactor:rendaVol,thin,inadimplente:Boolean(inadimplente)};
+}
+
+function getDecision(score,comp,thin,inadimplente){
+  // Política de concessão do protótipo:
+  // 1) Inadimplência ativa impede aprovação automática.
+  // 2) Comprometimento >70% impede concessão.
+  // 3) 50%-70% exige condição/revisão.
+  // 4) Depois dos bloqueios, aplica-se a régua de score.
+  if(inadimplente)
+    return {
+      risco:'Alto',
+      rec:'RECUSA RECOMENDADA',
+      reason:'Cliente possui inadimplência ativa. A política impede nova concessão automática enquanto houver atraso vigente.'
+    };
+
+  if(comp > 70)
+    return {
+      risco:'Alto',
+      rec:'RECUSA RECOMENDADA',
+      reason:'Pedido acima de 70% da renda mensal declarada.'
+    };
+
+  if(comp > 50)
+    return {
+      risco:score>=650?'Médio':'Alto',
+      rec:score>=650?'APROVAÇÃO CONDICIONADA':'ANÁLISE MANUAL / LIMITE REDUZIDO',
+      reason:'Comprometimento acima de 50% exige condição, revisão de limite ou análise do comitê.'
+    };
+
+  if(score >= 700){
+    if(thin)
+      return {
+        risco:'Baixo',
+        rec:'APROVAÇÃO CONDICIONADA',
+        reason:'Score forte, porém cliente thin file exige validação adicional das evidências alternativas.'
+      };
+    return {
+      risco:'Baixo',
+      rec:'APROVAÇÃO RECOMENDADA',
+      reason:'Score ≥700, sem inadimplência ativa e comprometimento ≤50%.'
+    };
+  }
+
+  if(score >= 550)
+    return {
+      risco:'Médio',
+      rec:'APROVAÇÃO CONDICIONADA',
+      reason:'Score intermediário; concessão deve respeitar limite e condições definidos pelo comitê.'
+    };
+
+  if(score >= 450)
+    return {
+      risco:'Médio',
+      rec:'ANÁLISE MANUAL / LIMITE REDUZIDO',
+      reason:'Score intermediário-baixo; requer avaliação humana e possível redução do limite.'
+    };
+
+  return {
+    risco:'Alto',
+    rec:'RECUSA RECOMENDADA',
+    reason:'Score abaixo de 450 na régua demonstrativa.'
+  };
+}
+
+function logEvent(acao,cliente,resultado,detalhe){
+ const logs=JSON.parse(localStorage.getItem('credithub_logs')||'[]');
+ logs.unshift({ts:new Date().toLocaleString('pt-BR'),user:'Analista',acao,cliente,resultado,detalhe});
+ localStorage.setItem('credithub_logs',JSON.stringify(logs.slice(0,500))); renderLogs();
+}
+function renderLogs(){
+ const body=document.getElementById('logsBody'); if(!body)return; const f=(document.getElementById('logFilter')?.value||'').toLowerCase();
+ const logs=JSON.parse(localStorage.getItem('credithub_logs')||'[]').filter(x=>JSON.stringify(x).toLowerCase().includes(f));
+ body.innerHTML=logs.map(x=>`<tr><td>${x.ts}</td><td>${x.user}</td><td>${x.acao}</td><td><b>${x.cliente||'—'}</b></td><td>${x.resultado||'—'}</td><td>${x.detalhe||''}</td></tr>`).join('');
+ document.getElementById('noLogs').style.display=logs.length?'none':'block';
+}
+function clearLogs(){localStorage.removeItem('credithub_logs');renderLogs();toast('Log limpo.');}
+function analisarNovoCliente(){
+ const id=document.getElementById('fId').value.trim()||'CLI-'+String(base.clients+1).padStart(5,'0');
+ const bureau=num('fBureau'),meses=num('fMeses'),renda=num('fRenda'),pix=num('fPix'),dias=num('fDias');
+ const cidadePct=num('fCidadePct'),volatilidade=num('fVolatilidade'),pedido=num('fPedido'),obs=document.getElementById('fObs').value.trim();
+ const inadimplente=document.getElementById('fInadimplente')?.value==='sim';
+ if(!renda||!pedido){toast('Informe pelo menos renda e valor solicitado.');return}
+ const r=calcScore({bureau,meses,renda,pix,dias,cidadePct,pedido,volatilidade,inadimplente});
+ const thin=bureau===0,dec=getDecision(r.score,r.comprometimento,thin,inadimplente),risco=dec.risco,rec=dec.rec;
+ let fatores=[];
+ fatores.push('Volatilidade da renda: faixa '+r.rendaFactor.label+' ('+volatilidade+'% de referência).');
+ fatores.push('Score alternativo: '+r.alt+' pontos.');
+ fatores.push('Situação atual de pagamento: '+(inadimplente?'INADIMPLENTE — bloqueio de concessão automática.':'ADIMPLENTE — sem inadimplência ativa.'));
+ fatores.push('Estabilidade residencial: '+cidadePct+'% do tempo na mesma cidade ('+r.cidadeFactor.label+').');
+ fatores.push('Volatilidade da renda: '+rendaFactorLabel(volatilidade)+'.');
+ if(thin)fatores.push('Cliente thin file: não há score bureau, portanto o comportamento alternativo tem maior peso.');
+ else fatores.push('Score bureau informado: '+bureau+'.');
+ fatores.push('Renda mensal de '+money(renda)+' para um pedido de '+money(pedido)+' ('+r.comprometimento.toFixed(1).replace('.',',')+'% da renda mensal).');
+ fatores.push(dec.reason);
+ if(meses>=24)fatores.push('Relacionamento com a conta acima de 24 meses.');
+ if(dias>=20)fatores.push('Boa atividade no aplicativo.');
+ if(pix>=30)fatores.push('Volume de Pix relevante.');
+ if(obs)fatores.push('Observação do analista: '+obs);
+ const html=`<div class="card"><div class="section-title">Resultado — ${id}</div>
+ <div class="client">
+ <div class="metric">Score final<b>${r.score}</b></div>
+ <div class="metric">Score alternativo<b>${r.alt}</b></div>
+ <div class="metric">Risco<b><span class="pill ${risco==='Baixo'?'low':risco==='Médio'?'medium':'high'}">${risco}</span></b></div>
+ <div class="metric">Renda mensal<b>${money(renda)}</b></div>
+ <div class="metric">Pedido<b>${money(pedido)}</b></div>
+ <div class="metric">Comprometimento<b>${r.comprometimento.toFixed(1).replace('.',',')}%</b></div>
+ <div class="metric">Tempo na mesma cidade<b>${cidadePct}%</b></div>
+ <div class="metric">Volatilidade da renda<b>${r.rendaFactor.label}</b></div>
+ <div class="metric">Situação<b>${inadimplente?'INADIMPLENTE':'ADIMPLENTE'}</b></div>
+ <div class="metric">Perfil<b>${thin?'Thin file':'Com bureau'}</b></div>
+ </div>
+ <div class="decision"><strong>${rec}</strong><br><span class="label">${dec.reason} A decisão final permanece com o analista/comitê.</span></div>
+ <div class="explain"><b>Explicação para o comitê</b><br>${fatores.map(x=>'• '+x).join('<br>')}</div>
+ <div class="actions"><button class="primary" onclick="show('cliente',document.querySelectorAll('.nav button')[2])">Abrir análise completa</button></div>
+ </div>`;
+ document.getElementById('resultadoNovo').innerHTML=html;
+ document.getElementById('resultadoNovo').classList.add('show');
+ document.getElementById('ultimaAnalise').innerHTML=html;
+ base.clients++;base.total+=pedido;renderKpis();
+ logEvent('Análise de crédito',id,rec,`Score ${r.score} | ${risco} | cidade ${cidadePct}% | volatilidade ${r.rendaFactor.label} | ${inadimplente?'INADIMPLENTE':'ADIMPLENTE'} | pedido ${money(pedido)}`);
+ toast('Análise concluída para '+id);
+}
+function limparFormulario(){['fId','fBureau','fMeses','fRenda','fPix','fDias','fPedido','fObs'].forEach(id=>document.getElementById(id).value='');document.getElementById('fCidadePct').value='80';document.getElementById('fVolatilidade').value='15';document.getElementById('fInadimplente').value='nao';document.getElementById('cidadePctValue').textContent='80%';document.getElementById('resultadoNovo').classList.remove('show');atualizarFatores();}
+function toast(t){const x=document.getElementById('toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),2500)}
+function answer(q){q=q.toLowerCase();if(q.includes('risco')||q.includes('carteira'))return '<b>Insight:</b> 76,2% dos clientes estão em risco médio. Como esse grupo concentra cerca de 77,5% do valor solicitado, a maior oportunidade está em melhorar a segmentação, limites e aprovação condicionada desse público.';if(q.includes('thin')||q.includes('bureau'))return '<b>Insight:</b> 32,6% são thin file. O score alternativo médio é 574 nesse grupo, contra 634 entre clientes com bureau. O RAG pode consultar políticas específicas para complementar a análise.';if(q.includes('cliente')||q.includes('482'))return '<b>Parecer:</b> CLI-00482 apresenta risco médio. O score alternativo e a capacidade financeira são positivos; a ausência de histórico bureau robusto é o principal ponto de atenção.';if(q.includes('kpi')||q.includes('indicador'))return '<b>KPIs:</b> risco por faixa, thin file, score médio, valor solicitado, ticket médio, taxa de aprovação, taxa de recusa e, após operação, inadimplência/PD.';return 'Tente perguntar sobre <b>risco da carteira</b>, <b>thin file</b>, <b>cliente CLI-00482</b> ou <b>KPIs</b>.'}
+function ask(inputId,chatId){const input=document.getElementById(inputId),chat=document.getElementById(chatId);if(!input.value.trim())return;const q=input.value;chat.innerHTML+=`<div class="msg user">${q}</div><div class="msg bot">${answer(q)}</div>`;logEvent('Pesquisa no Copiloto','—','Consulta realizada',q);input.value='';chat.scrollTop=chat.scrollHeight}
+</script><div class="explain"><b>Política de concessão — novos clientes</b><br>
+• <b>Inadimplência ativa:</b> bloqueia aprovação automática e leva à recusa recomendada até regularização. <br>
+• <b>Comprometimento:</b> acima de 70% = recusa recomendada; de 50% a 70% = condição/revisão; até 50% = segue para a régua de score.<br>
+• <b>Score ≥700:</b> aprovação recomendada, exceto thin file, que exige condição/validação adicional.<br>
+• <b>Score 550–699:</b> aprovação condicionada.<br>
+• <b>Score 450–549:</b> análise manual/limite reduzido.<br>
+• <b>Score &lt;450:</b> recusa recomendada.<br>
+• <b>Estabilidade residencial:</b> usa o % de tempo na mesma cidade nos últimos 6 meses.<br>
+• <b>Volatilidade da renda:</b> menor volatilidade melhora a avaliação; maior volatilidade reduz a atratividade do risco.<br>
+• <b>Importante:</b> a régua é demonstrativa para o projeto acadêmico e deve ser calibrada com histórico real de inadimplência antes de uso produtivo.
+</div></body></html>
